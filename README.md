@@ -1,7 +1,10 @@
 # DeepTraCE
-DeepTraCE is a deep-learning based pipeline for analysis of whole-brain light sheet microscopy images. Our pipeline is optimized for recognition of cortical axons and largely builds on TRAILMAP (Friedmann et. al., 2020). The final output of this pipeline includes skeletonized images of the axon segmentations from each brain, which have been transformed to a common atlas, as well as quantifications of labeling density in each brain region.
 
 
+![trailmap_fig2_tophalf](https://user-images.githubusercontent.com/52982623/150889628-e079e5a2-8d12-432c-a969-20b63e1525d3.png)
+![Figure2_bottomhalf](https://user-images.githubusercontent.com/52982623/150889800-59ff6e0c-d8fa-4727-bf64-eb5243fc120b.png)
+
+**DeepTraCE** is a deep-learning based pipeline for analysis of whole-brain light sheet microscopy images. Our pipeline is optimized for recognition of cortical axons and largely builds on TRAILMAP (Friedmann et. al., 2020). The final output of this pipeline includes skeletonized images of the axon segmentations from each brain, which have been transformed to a common atlas, as well as quantifications of labeling density in each brain region.
 
 **DeepTraCE Pipeline**
 
@@ -21,7 +24,7 @@ In our protocol, we image axons in the 640nm channel and autofluorescence in the
 TRAILMAP is the Deep-Learning pipeline used to convert the raw 640nm image stack to an image stack of the same size containing a map of the probability that each pixel contains an axon.  Pixel values of 1 indicate high likelihood that an axon is contained in that region, and pixel values of 0 indicate low likelihood. This probability is calculated using a 3D convolutional network that has been trained to recognize axons.
 
 <pre>
-640nm (axons) 			    	    Probability map (TRAILMAP output)        
+640nm (axons) 			    	 Probability map (TRAILMAP output)        
 <img src="https://user-images.githubusercontent.com/52982623/150884307-d6850d3c-bff5-4dc4-8e40-d672646ae1c2.png" width="200">               <img src="https://user-images.githubusercontent.com/52982623/150887072-0f8c9b11-595d-415d-9779-f373741df6d2.png" width="200">
 </pre>
 
@@ -116,7 +119,7 @@ elastix -f *directory/fixedImage.ext* -m *directory/movingImage.ext* -out *outpu
 
 
 <pre>
-Pre-alignment					Post-alignment  
+Pre-alignment				   Post-alignment  
 <img src="https://user-images.githubusercontent.com/52982623/150887733-22cc6e67-eb54-44fc-bfaf-4d6d437d27a4.jpg" width="200">                <img src="https://user-images.githubusercontent.com/52982623/150887767-31aaef83-daaf-4333-aa89-05d46afb669a.jpg" width="200">
 </pre>
 
@@ -132,7 +135,10 @@ transformix -in *directory/inputImage.ext* -out *outputDirectory* -tp *directory
 1. The input image is the scaled, rotated, and cropped TRAILMAP output file. If you are planning to concatenate multiple models, you will need to perform this on the probability map of each model.
 1. This will output the transformed axon probability map as “result.mhd”
 
-Pre-alignment					Post-alignment
+<pre>
+Pre-alignment				   Post-alignment  
+<img src="https://user-images.githubusercontent.com/52982623/150889034-671234a8-7196-4b03-b552-410220ffea23.jpg" width="200">                <img src="https://user-images.githubusercontent.com/52982623/150889052-ce6c7bb8-81c1-4ccc-a622-285b94362fc1.jpg" width="200">
+</pre>
 
 
 **Step 6: Convert .mhd file to 8-bit .tif file using ImageJ**
@@ -150,7 +156,12 @@ This is a simple image processing step to put the file in a matlab-friendly form
 
 This step is only necessary if you are using different models to segment different brain regions. To do this, we take advantage of the fact that each coordinate in all of our transformed images now corresponds with a particular brain region, which is contained in the annotation file from the atlas. From this, we can assign pixels from each of the three segmentations to a final image in which a single segmentation is used for each brain region.
 
-Single Model				Concatenated Models
+
+<pre>
+Single Model				   Concatenated Models
+<img src="https://user-images.githubusercontent.com/52982623/150889190-36e07e25-dc32-47db-8ab4-46e225ee2043.png" width="200">                <img src="https://user-images.githubusercontent.com/52982623/150889207-2141b2b1-e3e4-4742-a3b5-9692baa5e5ad.png" width="200">
+</pre>
+
 
 		
 1. Arrange model segmentations such that they are all in the same folder for each brain with consistent file names.
@@ -166,8 +177,11 @@ Next, we begin the process of skeletonizing the axon segmentations. We incorpora
 
 The first step of this process involves binarizing the image, after which the binary image can be reduced down to single-voxel skeletons in 3D. To preserve variability in intensity values from the segmentation, we perform this skeletonization after binarizing at 8 different thresholds. The 8 resulting skeletons are then combined in the next step.
 
-Pre-skeletonization			Post-skeletonization
 
+<pre>
+Pre-skeletonization			   Post-skeletonization
+<img src="https://user-images.githubusercontent.com/52982623/150889207-2141b2b1-e3e4-4742-a3b5-9692baa5e5ad.png" width="200">                <img src="https://user-images.githubusercontent.com/52982623/150889292-6cdf8646-5564-4600-a7b6-84838afddfc8.png" width="200">
+</pre>
 
 
 1. Open Anaconda Prompt
