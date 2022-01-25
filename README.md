@@ -8,7 +8,6 @@
 
 **DeepTraCE Pipeline**
 
-NOTE: In windows explorer, to copy the path of a file, use Shift+RightClick and select “copy as path”
 
 **Step 1: Imaging**
 
@@ -61,6 +60,8 @@ python segment\_brain\_batch.py *input\_folder1 input\_folder2 input\_folder3*
 1. Repeat segmentation with other models
    1. Change the name of the segmentation folders so they are not overwritten when you re-segment the brain with a new model (example: change name of the folder “seg-640\_NAc1” to “model1\_seg-640\_NAc1”)
    1. Repeat steps b through d above using a the other models
+
+NOTE: In windows explorer, to copy the path of a file, use Shift+RightClick and select “copy as path”
 
 **Step 3: Scale brain to a 10μm space and convert to 8-bit using ImageJ**
 
