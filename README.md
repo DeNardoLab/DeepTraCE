@@ -6,6 +6,8 @@
 
 **DeepTraCE** is a deep-learning based pipeline for analysis of whole-brain light sheet microscopy images. Our pipeline is optimized for recognition of cortical axons and largely builds on TRAILMAP (Friedmann et. al., 2020). The final output of this pipeline includes skeletonized images of the axon segmentations from each brain, which have been transformed to a common atlas, as well as quantifications of labeling density in each brain region.
 
+Code written by Michael Gongwer and Drew Friedmann.
+
 **DeepTraCE Pipeline**
 
 
@@ -71,7 +73,7 @@ These steps must be performed on both the 488nm raw channel and the probability 
 
 1. Open ImageJ (NOTE: our macros are compatible with ImageJ v1.52 but not v1.53)
 1. Click “plugins” → “macros” → “edit” and open the macro file for brain scaling (macro 1)
-1. In the first line, add the path for the first **.tif file** of each brain you want to analyze to the array, separating them by commas
+1. In line 2, add the path for the first **.tif file** of each brain you want to analyze to the array, separating them by commas
    1. You will want to scale both the TRAILMAP output and the 488nm channel for each brain. If you are planning to concatenate multiple models, you will need to do this for all of the probability maps.
    1. NOTE: macros are very finicky; you may need to change all the \ in the directories to \\
 1. Run the macro using ctrl-R
@@ -148,7 +150,7 @@ This is a simple image processing step to put the file in a matlab-friendly form
 
 1. Open ImageJ
 1. Click “plugins” → “macros” → “edit” and open the macro file for this step (macro 2)
-1. In the first line, add the path to the **.mhd file** from the transformix output of each brain to the array, separating them by commas
+1. In line 2, add the path to the **.mhd file** from the transformix output of each brain to the array, separating them by commas
    1. NOTE: macros are very finicky; you may need to change all the \ in the directories to \\
 1. Run the macro using ctrl-R
 1. This will output the brain as FP.tif to the same folder as the .mhd file
@@ -166,10 +168,10 @@ Single Model				   Concatenated Models
 
 		
 1. Arrange model segmentations such that they are all in the same folder for each brain with consistent file names.
-1. Open multimodel.m in MATLAB
-1. Change “regions” in line 1 to match the file path of the atlas .nrrd file
-1. Change “folders” in line 5 to the directory containing the three model segmentations
-1. Change line 20 to the file name of the segmentation you would like to use as the default (in our case, model 2. Change lines 24 and 28 to the segmentations you would like to apply to defined brain regions. Indicate the regions where you would like to apply these respective models in lines 32 and 34.
+1. Open concatenate-models.m in MATLAB
+1. Change “regions” in line 7 to match the file path of the atlas .nrrd file
+1. Change “folders” in line 10 to the directory containing the three model segmentations
+1. Change line 27 to the file name of the segmentation you would like to use as the default (in our case, model 2. Change lines 33 and 39 to the segmentations you would like to apply to defined brain regions. Indicate the regions where you would like to apply these respective models in lines 48 and 53.
 1. Click run. This will output FP\_comb to the same directory as your non-concatenated model segmentations.
 
 **Step 8: Create initial skeletons of the concatenated image in python**
@@ -202,8 +204,8 @@ Now that we have 8 folders for each brain, each using a different threshold for 
 
 Another part of this code removes small objects from the skeletonized image. Given that the axons of interest are typically long and would span several pixels throughout a whole-brain image, an effective technique for removing artifacts that are unlikely to be axons is the removal of skeletonized objects under a particular length. This is incorporated into this matlab step. 
 
-1. Open combiner.m in MATLAB
-1. Change the directory in “folders” in line 2 to the folder containing FP\_comb.tif
+1. Open skeletoncombiner.m in MATLAB
+1. Change the directory in “folders” in line 7 to the folder containing FP\_comb.tif
 1. Click run. This should output the combined skeleton into a folder called “sizeCut\_slices”
 
 **Step 10: Adjust pixel values to 15 specific numbers using ImageJ**
@@ -212,7 +214,7 @@ For the sake of simplifying our quantification and visualization code, we found 
 
 1. Open ImageJ
 1. Click “plugins” → “macros” → “edit” and open the macro file for this step (macro 3)
-1. In the first line, add the path for the first **.tif file** of each brain you want to analyze to the array, separating them by commas
+1. In line 2, add the path for the first **.tif file** of each brain you want to analyze to the array, separating them by commas
    1. NOTE: macros are very finicky; you may need to change all the \ in the directories to \\
 1. Run the macro using ctrl-R
 1. This will output the brain as “FP\_skel.tif” to the same folder as FP.tif
@@ -223,7 +225,7 @@ For the sake of simplifying our quantification and visualization code, we found 
 We now have our final transformed images with skeletonized axons. We can thus extract the number of pixels in each brain region that contain a skeletonized axon above a particular intensity threshold. This step provides an excel file with the raw pixel count by region in addition to data normalized in three different ways: normalized solely by region volume, normalized by total fluorescence across the brain, and normalized by both region volume and total fluorescence (which is what we use for our analyses).
 
 1. Open regionQuant.m in MATLAB
-1. Change “regions” and “annotated” in lines 3 and 5 to match the file paths of the atlas .nrrd file and the annotation .csv file, respectively.
-1. Change “folders” in line 19 to the directory containing FP\_skel.tif from the previous step
-1. If you’d like to change the threshold, change lines 59, 70, and 80
+1. Change “regions” and “annotated” in lines 7 and 11 to match the file paths of the atlas .nrrd file and the annotation .csv file, respectively.
+1. Change “folders” in line 26 to the directory containing FP\_skel.tif from the previous step
+1. If you’d like to change the threshold, change lines 74, 85, and 95
 1. Click run. This will output AxonCounts.xlsx to the same directory as FP\_skel.tif
