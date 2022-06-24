@@ -8,6 +8,10 @@
 
 Code written by Michael Gongwer and Drew Friedmann.
 
+Models can be found at https://ucla.box.com/s/zc4ib0mo297h3wdbbjdd237r2mzd1crf
+
+Sample data can be found at https://ucla.box.com/s/2bm6disejkwrmspugh8s4bmc3yq4p531
+
 **DeepTraCE Pipeline**
 
 
