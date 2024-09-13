@@ -6,6 +6,8 @@
 
 **DeepTraCE** is a deep-learning based pipeline for analysis of whole-brain light sheet microscopy images. Our pipeline is optimized for recognition of cortical axons and largely builds on TRAILMAP (Friedmann et. al., 2020). The final output of this pipeline includes skeletonized images of the axon segmentations from each brain, which have been transformed to a common atlas, as well as quantifications of labeling density in each brain region.
 
+**This is for the original step-by-step version of DeepTraCE. A streamlined version of the pipeline, all in python, is available at https://github.com/jcouto/DeepTraCE/tree/gui
+
 Code written by Michael Gongwer and Drew Friedmann.
 
 Models can be found at https://ucla.box.com/s/zc4ib0mo297h3wdbbjdd237r2mzd1crf
